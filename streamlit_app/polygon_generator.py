@@ -1,4 +1,5 @@
 from typing import List, Tuple
+import streamlit as st
 import math
 import random
 
@@ -53,6 +54,7 @@ def generate_polygon(center: Tuple[float, float], avg_radius: float,
         points.append(point)
         angle += angle_steps[i]
 
+    st.session_state['random_polygon_points'] = points
     return points
 
 def random_angle_steps(steps: int, irregularity: float) -> List[float]:

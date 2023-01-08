@@ -1,0 +1,4 @@
+PyNiteFEA
+shapely
+matplotlib
+papermodels
