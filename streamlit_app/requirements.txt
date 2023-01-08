@@ -2,3 +2,4 @@ PyNiteFEA
 shapely
 matplotlib
 papermodels
+scipy

@@ -8,9 +8,9 @@ from papermodels.models import load_distribution as ld
 
 # From https://stackoverflow.com/questions/8997099/algorithm-to-generate-random-2d-polygon/25276331#25276331
 
-here = pathlib.Path.cwd()#
 
-with open(here / 'planter.wkt') as file:#
+
+with open('streamlit_app/planter.wkt') as file:#
     laby_poly = load_wkt(file)
 
 total_load = st.sidebar.number_input("Set total soil weight", value=5000, step=10)
