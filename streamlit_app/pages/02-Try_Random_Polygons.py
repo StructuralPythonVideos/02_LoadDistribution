@@ -127,4 +127,4 @@ st.write(f"Max Smeared Moment: {round(smeared_moment, 1)}")
 msg = f":green[Smeared moment is conservative]" if abs(smeared_moment) > abs(projected_moment) else f":red[Smeared moment is NOT conservative]"
 st.metric(label=msg, value=f"{round((smeared_moment - projected_moment)/projected_moment*100, 1)}%", )
 
-st.sidebar.image("logo-black.png")
+st.sidebar.image("streamlit_app/logo-black.png")

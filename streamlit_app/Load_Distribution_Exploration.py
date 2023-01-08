@@ -25,5 +25,5 @@ st.write(
     https://github.com/StructuralPython/papermodels/blob/main/src/papermodels/models/load_distribution.py
     """
 )
-here = pathlib.Path.cwd()
-st.sidebar.image("logo-black.png")
+
+st.sidebar.image("streamlit_app/logo-black.png")
