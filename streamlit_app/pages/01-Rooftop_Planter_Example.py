@@ -66,36 +66,36 @@ for idx, coord in enumerate(projected_poly_coords[1:-1]):
 from PyNite import FEModel3D
 
 # Create a new finite element model
-SimpleBeam = FEModel3D()
-SimpleBeam.add_load_combo("Projected", {"Case 1": 1.0}, combo_type='strength')
-SimpleBeam.add_load_combo("Smeared", {"Case 2": 1.0}, combo_type='strength')
+simple_beam = FEModel3D()
+simple_beam.add_load_combo("Projected", {"Case 1": 1.0})
+simple_beam.add_load_combo("Smeared", {"Case 2": 1.0})
 
 # Add nodes (14 ft = 168 in apart)
-SimpleBeam.add_node('N1', 0, 0, 0)
-SimpleBeam.add_node('N2', xmax2-xmin2, 0, 0)
+simple_beam.add_node('N1', 0, 0, 0)
+simple_beam.add_node('N2', xmax2-xmin2, 0, 0)
 
 # Add a beam with the following properties:
 # E = 29000 ksi, G = 11400 ksi, Iy = 100 in^4, Iz = 150 in^4, J = 250 in^4, A = 20 in^2
-SimpleBeam.add_member('M1', 'N1', 'N2', 29000, 11400, 100, 150, 250, 20)
+simple_beam.add_member('M1', 'N1', 'N2', 29000, 11400, 100, 150, 250, 20)
 
 # Provide simple supports
-SimpleBeam.def_support('N1', 1, 1, 1, 0, 0, 0)
-SimpleBeam.def_support('N2', 1, 1, 1, 1, 0, 0)
+simple_beam.def_support('N1', 1, 1, 1, 0, 0, 0)
+simple_beam.def_support('N2', 1, 1, 1, 1, 0, 0)
 
 # Add a uniform load of 200 lbs/ft to the beam
 for udl in udls:
     left, right = udl
-    SimpleBeam.add_member_dist_load('M1', 'Fy', -left[1]/1000, -right[1]/1000, left[0], right[0],   case="Case 1")
+    simple_beam.add_member_dist_load('M1', 'Fy', -left[1]/1000, -right[1]/1000, left[0], right[0],   case="Case 1")
 
 # Alternatively the following line would do apply the load to the full length of the member as well
 load = total_load / (xmax2 - xmin2)
-SimpleBeam.add_member_dist_load('M1', 'Fy', -load/1000, -load/1000, case="Case 2")
+simple_beam.add_member_dist_load('M1', 'Fy', -load/1000, -load/1000, case="Case 2")
 
 # Analyze the beam3
-SimpleBeam.analyze()
+simple_beam.analyze()
 
-projected_moment = SimpleBeam.Members['M1'].min_moment("Mz", "Projected")
-smeared_moment = SimpleBeam.Members['M1'].min_moment("Mz", "Smeared")
+projected_moment = simple_beam.Members['M1'].min_moment("Mz", "Projected")
+smeared_moment = simple_beam.Members['M1'].min_moment("Mz", "Smeared")
 
 st.write(f"Max Projected Moment: {round(projected_moment, 1)}")
 st.write(f"Max Smeared Moment: {round(smeared_moment, 1)}")
