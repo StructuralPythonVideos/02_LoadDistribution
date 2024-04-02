@@ -78,12 +78,12 @@ ax2.set_title(label="Projected Load on Beam")
 
 st.pyplot(fig)
 
-udls = []
+dist_loads = []
 inner = []
 for idx, coord in enumerate(projected_poly_coords[1:-1]):
     if idx % 2 == 1:
         inner.append(coord)
-        udls.append(inner)
+        dist_loads.append(inner)
         inner = []
     else:
         inner.append(coord)
@@ -92,6 +92,7 @@ from PyNite import FEModel3D
 
 # Create a new finite element model
 simple_beam = FEModel3D()
+simple_beam.add_material("default", E=1, G=1, nu=0.3, rho=1, fy=1)
 simple_beam.add_load_combo("Projected", {"Case 1": 1.0})
 simple_beam.add_load_combo("Smeared", {"Case 2": 1.0})
 
@@ -100,16 +101,24 @@ simple_beam.add_node('N1', 0, 0, 0)
 simple_beam.add_node('N2', xmax2-xmin2, 0, 0)
 
 # Add a beam with the following properties:
-# E = 29000 ksi, G = 11400 ksi, Iy = 100 in^4, Iz = 150 in^4, J = 250 in^4, A = 20 in^2
-simple_beam.add_member('M1', 'N1', 'N2', 29000, 11400, 100, 150, 250, 20)
+simple_beam.add_member('M1', 'N1', 'N2', 'default', Iy=1, Iz=1, J=1, A=1)
 
 # Provide simple supports
 simple_beam.def_support('N1', 1, 1, 1, 0, 0, 0)
 simple_beam.def_support('N2', 1, 1, 1, 1, 0, 0)
 
 # Add a uniform load of 200 lbs/ft to the beam
-for udl in udls:
-    left, right = udl
+for dist_load in dist_loads:
+    left, right = dist_load
+    simple_beam.add_member_dist_load('M1', 'Fy', -left[1]/1000, -right[1]/1000, left[0], right[0],   case="Case 1")
+
+# Provide simple supports
+simple_beam.def_support('N1', 1, 1, 1, 0, 0, 0)
+simple_beam.def_support('N2', 1, 1, 1, 1, 0, 0)
+
+# Add a uniform load of 200 lbs/ft to the beam
+for dist_load in dist_loads:
+    left, right = dist_load
     simple_beam.add_member_dist_load('M1', 'Fy', -left[1]/1000, -right[1]/1000, left[0], right[0],   case="Case 1")
 
 # Alternatively the following line would do apply the load to the full length of the member as well
