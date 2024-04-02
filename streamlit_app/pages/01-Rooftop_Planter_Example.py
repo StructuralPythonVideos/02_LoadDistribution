@@ -100,6 +100,9 @@ smeared_moment = simple_beam.Members['M1'].min_moment("Mz", "Smeared")
 st.write(f"Max Projected Moment: {round(projected_moment, 1)}")
 st.write(f"Max Smeared Moment: {round(smeared_moment, 1)}")
 msg = f":green[Smeared moment is conservative]" if abs(smeared_moment) > abs(projected_moment) else f":red[Smeared moment is NOT conservative]"
-st.metric(label=msg, value=f"{round((smeared_moment - projected_moment)/projected_moment*100, 1)}%", )
+delta = round((smeared_moment - projected_moment)/projected_moment*100, 1)
+st.metric(label=msg, value=f"{delta}%", )
+if abs(delta) <= 11:
+    st.write("But the difference is around 10% so lets not get too worried about it.")
 
 st.sidebar.image("streamlit_app/logo-black.png")
