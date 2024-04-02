@@ -110,6 +110,7 @@ simple_beam.def_support('N2', 1, 1, 1, 1, 0, 0)
 # Add a uniform load of 200 lbs/ft to the beam
 for dist_load in dist_loads:
     left, right = dist_load
+    st.write(left, right)
     simple_beam.add_member_dist_load('M1', 'Fy', -left[1]/1000, -right[1]/1000, left[0], right[0],   case="Case 1")
 
 # Provide simple supports
